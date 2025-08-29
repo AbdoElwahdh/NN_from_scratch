@@ -85,13 +85,14 @@ public class NeuralNetwork {
                         
                         // Calculate error for next layer
                         if (k > 0) {
-                            // Calculate pre-activation values for derivative
+
+                          // Calculate pre-activation values for derivative
                             double[] preActivation = MatrixOperations.multiply(layer.getWeights(), layerInput);
                             for (int b = 0; b < preActivation.length; b++) {
                                 preActivation[b] += layer.getBiases()[b];
                             }
                             double[] derivative = layer.getActivation().derivative(preActivation);
-                            // Make sure derivative has the same length as error (nextError)
+                            // derivative has the same length as error (nextError)
                             if (derivative.length != error.length) {
                                 System.err.println("Warning: derivative length (" + derivative.length + 
                                                  ") != error length (" + error.length + ")");
