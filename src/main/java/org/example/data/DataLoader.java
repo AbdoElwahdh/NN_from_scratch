@@ -53,7 +53,7 @@ public class DataLoader {
         for (int i = 0; i < 28; i++) {
             for (int j = 0; j < 28; j++) {
                 double pixel = image[i * 28 + j];
-                // نطبع الرقم مع تقريب بسيط (عشان ميكونش طويل قوي)
+                // Print pixel value with simple rounding (to avoid very long numbers)
                 System.out.printf("%.2f ", pixel);
             }
             System.out.println();

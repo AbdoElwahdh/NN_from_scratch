@@ -15,9 +15,8 @@ public class Backpropagation {
         double[] error = new double[weights[0].length];
         for (int j = 0; j < weights[0].length; j++) {
             for (int i = 0; i < weights.length; i++) {
-                error[j] += weights[i][j] * nextError[i];
+                error[j] += weights[i][j] * nextError[i] * derivative[i];
             }
-            error[j] *= derivative[j];
         }
         return error;
     }
