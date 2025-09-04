@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Load MNIST dataset
+
             String trainImages_path = "data/train-images-idx3-ubyte/train-images-idx3-ubyte"; 
             String trainLabels_path = "data/train-labels-idx1-ubyte/train-labels-idx1-ubyte"; 
             String testImages_path  = "data/t10k-images-idx3-ubyte/t10k-images-idx3-ubyte"; 
