@@ -2,6 +2,9 @@ package org.example.mathematics;
 
 public class MatrixOperations {
     
+    /**
+     * Matrix multiplication (a x b).
+     */
     public static double[][] multiply(double[][] a, double[][] b) {
         if (a[0].length != b.length) {
             throw new IllegalArgumentException("Matrix dimensions don't match for multiplication");
@@ -18,6 +21,9 @@ public class MatrixOperations {
         return result;
     }
     
+    /**
+     * Matrix-vector multiplication (a x b).
+     */
     public static double[] multiply(double[][] a, double[] b) {
         if (a[0].length != b.length) {
             throw new IllegalArgumentException("Matrix and vector dimensions don't match for multiplication");
@@ -32,6 +38,9 @@ public class MatrixOperations {
         return result;
     }
     
+    /**
+     * Element-wise matrix addition.
+     */
     public static double[][] add(double[][] a, double[][] b) {
         if (a.length != b.length || a[0].length != b[0].length) {
             throw new IllegalArgumentException("Matrix dimensions don't match for addition");
@@ -46,6 +55,9 @@ public class MatrixOperations {
         return result;
     }
     
+    /**
+     * Matrix transpose.
+     */
     public static double[][] transpose(double[][] matrix) {
         double[][] result = new double[matrix[0].length][matrix.length];
         for (int i = 0; i < matrix.length; i++) {
@@ -56,6 +68,9 @@ public class MatrixOperations {
         return result;
     }
     
+    /**
+     * Scalar times matrix.
+     */
     public static double[][] scalarMultiply(double scalar, double[][] matrix) {
         double[][] result = new double[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
