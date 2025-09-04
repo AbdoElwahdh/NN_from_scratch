@@ -1,8 +1,13 @@
 package org.example.activations;
 
-
+/**
+ * Sigmoid activation: 1 / (1 + e^-x).
+ */
 public class Sigmoid implements ActivationFunction {
     
+    /**
+     * Applies sigmoid element-wise.
+     */
     @Override
     public double[] activate(double[] input) {
         double[] output = new double[input.length];
@@ -12,6 +17,9 @@ public class Sigmoid implements ActivationFunction {
         return output;
     }
     
+    /**
+     * Computes sigmoid'(x) = s(x) * (1 - s(x)) element-wise.
+     */
     @Override
     public double[] derivative(double[] input) {
         double[] output = new double[input.length];

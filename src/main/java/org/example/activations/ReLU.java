@@ -1,8 +1,13 @@
 package org.example.activations;
 
-
+/**
+ * Rectified Linear Unit activation: max(0, x).
+ */
 public class ReLU implements ActivationFunction {
     
+    /**
+     * Returns max(0, x) element-wise.
+     */
     @Override
     public double[] activate(double[] input) {
         double[] output = new double[input.length];
@@ -12,6 +17,9 @@ public class ReLU implements ActivationFunction {
         return output;
     }
     
+    /**
+     * Returns 1 for x>0, otherwise 0, element-wise.
+     */
     @Override
     public double[] derivative(double[] input) {
         double[] output = new double[input.length];

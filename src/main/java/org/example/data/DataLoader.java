@@ -4,8 +4,14 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+/**
+ * MNIST dataset utilities for reading IDX files and simple helpers.
+ */
 public class DataLoader {
 
+    /**
+     * Loads up to maxImages grayscale MNIST images normalized to [0,1].
+     */
     public static List<double[]> loadMNISTImages(String filename, int maxImages) throws IOException {
         List<double[]> images = new ArrayList<>();
         byte[] data = Files.readAllBytes(Paths.get(filename));
@@ -27,6 +33,9 @@ public class DataLoader {
         return images;
     }
 
+    /**
+     * Loads up to maxLabels MNIST labels as integers.
+     */
     public static List<Integer> loadMNISTLabels(String filename, int maxLabels) throws IOException {
         List<Integer> labels = new ArrayList<>();
         byte[] data = Files.readAllBytes(Paths.get(filename));
@@ -41,7 +50,10 @@ public class DataLoader {
 
         return labels;
     }
-  
+
+    /**
+     * Returns a one-hot encoded vector for the given label.
+     */
     public static double[] oneHotEncode(int label, int numClasses) {
         double[] encoded = new double[numClasses];
         encoded[label] = 1.0;
@@ -49,6 +61,9 @@ public class DataLoader {
     }
 
     // 🔹 Helper method to print first image as 28x28 matrix
+    /**
+     * Prints a 28x28 image grid from a flattened vector (for debugging).
+     */
     public static void printImage(double[] image) {
         for (int i = 0; i < 28; i++) {
             for (int j = 0; j < 28; j++) {
@@ -58,5 +73,6 @@ public class DataLoader {
             }
             System.out.println();
         }
-    }
-    
+    }    
+}
+

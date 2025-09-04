@@ -1,15 +1,15 @@
 package org.example;
 
-import org.example.layers.DenseLayer;
 import org.example.layers.Layer;
-import org.example.activations.*;
 import org.example.mathematics.*;
 import org.example.loss.LossFunction;
-import org.example.optimizer.GradientDescent;
 import org.example.optimizer.Optimizer;
 
 import java.util.*;
 
+/**
+ * Simple sequential neural network supporting dense layers, training and evaluation.
+ */
 public class NeuralNetwork {
     private List<Layer> layers;
     private Optimizer optimizer;
@@ -22,14 +22,17 @@ public class NeuralNetwork {
         this.validationAccuracy = new ArrayList<>();
     }
     
+    /** Adds a layer to the network in sequence. */
     public void addLayer(Layer layer) {
         layers.add(layer);
     }
     
+    /** Sets the optimizer for parameter updates. */
     public void setOptimizer(Optimizer optimizer) {
         this.optimizer = optimizer;
     }
     
+    /** Runs a forward pass through all layers. */
     public double[] forward(double[] input) {
         double[] current = input;
         for (Layer layer : layers) {
@@ -38,19 +41,27 @@ public class NeuralNetwork {
         return current;
     }
     
+    /**
+     * Trains the network with cross-entropy loss.
+     */
     public void train(List<double[]> trainData, List<double[]> trainLabels, 
                      int epochs, int batchSize) {
         
         for (int epoch = 0; epoch < epochs; epoch++) {
             double epochLoss = 0;
+            // shuffle data each epoch
+            List<Integer> indices = new ArrayList<>();
+            for (int idx = 0; idx < trainData.size(); idx++) indices.add(idx);
+            Collections.shuffle(indices, new Random(epoch * 1337L));
             
             for (int i = 0; i < trainData.size(); i += batchSize) {
                 int end = Math.min(i + batchSize, trainData.size());
                 
                 // Process batch
                 for (int j = i; j < end; j++) {
-                    double[] input = trainData.get(j);
-                    double[] target = trainLabels.get(j);
+                    int dataIndex = indices.get(j);
+                    double[] input = trainData.get(dataIndex);
+                    double[] target = trainLabels.get(dataIndex);
                     
                     // Forward pass
                     List<double[]> layerOutputs = new ArrayList<>();
@@ -73,15 +84,21 @@ public class NeuralNetwork {
                     for (int k = layers.size() - 1; k >= 0; k--) {
                         Layer layer = layers.get(k);
                         double[] layerInput = layerOutputs.get(k);
-                        double[] layerOutput = layerOutputs.get(k + 1);
+                        // double[] layerOutput = layerOutputs.get(k + 1); // not needed here
                         
                         // Calculate gradients
                         double[][] weightGradients = Gradient.calculateWeightGradient(layerInput, error);
                         double[] biasGradients = Gradient.calculateBiasGradient(error);
                         
-                        // Update weights and biases
-                        layer.updateWeights(weightGradients, 0.01); // Using fixed learning rate for simplicity
-                        layer.updateBiases(biasGradients, 0.01);
+                        // Update weights and biases using configured optimizer if provided
+                        if (optimizer != null) {
+                            optimizer.updateWeights(layer.getWeights(), weightGradients);
+                            optimizer.updateBiases(layer.getBiases(), biasGradients);
+                        } else {
+                            // fallback: simple SGD with small lr
+                            layer.updateWeights(weightGradients, 0.01);
+                            layer.updateBiases(biasGradients, 0.01);
+                        }
                         
                         // Calculate error for next layer
                         if (k > 0) {
@@ -109,6 +126,7 @@ public class NeuralNetwork {
         }
     }
     
+    /** Evaluates accuracy on the test set. */
     public double evaluate(List<double[]> testData, List<double[]> testLabels) {
         int correct = 0;
         
@@ -139,11 +157,17 @@ public class NeuralNetwork {
         return maxIndex;
     }
     
+    /** Returns average loss per epoch. */
     public List<Double> getTrainingLoss() {
         return trainingLoss;
     }
     
+    /** Returns recorded validation accuracies. */
     public List<Double> getValidationAccuracy() {
         return validationAccuracy;
+    }
+
+    public List<Layer> getLayers() {
+        return layers;
     }
 }

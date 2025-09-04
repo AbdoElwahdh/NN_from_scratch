@@ -6,10 +6,11 @@ A simple implementation of a neural network from scratch in Java, designed to cl
 
 This project implements a basic neural network with the following features:
 - **Dense Layers**: Fully connected neural network layers
-- **Activation Functions**: ReLU and Softmax activation functions
+- **Activation Functions**: ReLU, Sigmoid and Softmax activation functions
 - **Backpropagation**: Gradient-based learning algorithm
 - **MNIST Dataset**: Handwritten digit classification
-- **Maven Build**: Easy dependency management and compilation
+- **Artifacts Saving**: Saves architecture + learned weights/biases to JSON under `artifacts/`
+- **Maven or Plain javac Run**: Build and run via Maven or Java CLI
 
 ## Project Structure
 
@@ -24,7 +25,6 @@ src/main/java/org/example/
 │   └── DataLoader.java
 ├── layers/               # Neural network layers
 │   ├── DenseLayer.java
-│   ├── InputLayer.java
 │   └── Layer.java
 ├── loss/                 # Loss functions
 │   └── LossFunction.java
@@ -57,25 +57,29 @@ src/main/java/org/example/
 ## Requirements
 
 - Java 20 or higher
-- Maven 3.6 or higher
+- Maven 3.6 or higher (optional if you use plain `javac`/`java`)
 - MNIST dataset files (included in data/ folder)
 
-## Installation
+## Run
 
-1. Clone the repository:
+1) Clone the repository:
 ```bash
 git clone <repository-url>
 cd NN_from_scratch_java
 ```
 
-2. Compile the project:
+2) Option A — Run with Maven:
 ```bash
-mvn compile
+mvn -q compile
+mvn -q exec:java -Dexec.mainClass="org.example.Main"
 ```
 
-3. Run the application:
-```bash
-mvn exec:java -Dexec.mainClass="org.example.Main"
+2) Option B — Run with javac/java (Windows PowerShell):
+```powershell
+mkdir -Force target\classes
+$files = Get-ChildItem -Recurse -Filter *.java src\main\java | ForEach-Object { $_.FullName }
+javac -encoding UTF-8 -d target\classes $files
+java -cp target\classes org.example.Main
 ```
 
 ## Usage
@@ -85,6 +89,7 @@ The main application loads the MNIST dataset and demonstrates:
 - Neural network creation with dense layers
 - Training with backpropagation
 - Model evaluation and accuracy calculation
+- Model saving to JSON under `artifacts/`
 
 ## Configuration
 
@@ -93,6 +98,14 @@ You can modify the neural network architecture in `Main.java`:
 - Adjust learning rate
 - Modify number of epochs
 - Change batch size
+
+Model save path (default):
+```java
+long ts = System.currentTimeMillis();
+String outPath = String.format("artifacts/model-%d.json", ts);
+ModelIO.save(nn, outPath);
+```
+Change `artifacts/` or filename as you prefer. The directory is created automatically.
 
 ## Data
 
@@ -105,14 +118,14 @@ The project includes the MNIST dataset files:
 ## Building
 
 ```bash
-# Compile
-mvn compile
+# Compile (Maven)
+mvn -q compile
 
 # Package
-mvn package
+mvn -q package
 
 # Clean
-mvn clean
+mvn -q clean
 ```
 
 ## Contributing

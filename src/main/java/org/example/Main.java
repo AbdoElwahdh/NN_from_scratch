@@ -5,12 +5,15 @@ import org.example.activations.Softmax;
 import org.example.data.DataLoader;
 import org.example.layers.DenseLayer;
 import org.example.layers.Layer;
-import org.example.NeuralNetwork;
+import org.example.optimizer.Adam;
 
 
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Entry point: loads MNIST, builds a simple MLP, trains, evaluates, and saves model.
+ */
 public class Main {
     public static void main(String[] args) {
         try {
@@ -45,6 +48,7 @@ public class Main {
             
             // Create neural network
             NeuralNetwork nn = new NeuralNetwork();
+            nn.setOptimizer(new Adam(0.001, 0.9, 0.999, 1e-8));
             
             // Add layers
             Layer hiddenLayer = new DenseLayer(784, 128, new ReLU());
@@ -55,7 +59,7 @@ public class Main {
             
             // Train the network
             System.out.println("Training neural network...");
-            nn.train(trainImages, trainLabelsOneHot, 10, 32);
+            nn.train(trainImages, trainLabelsOneHot, 10, 64);
             
             // Evaluate the network
             double accuracy = nn.evaluate(testImages, testLabelsOneHot);
@@ -67,6 +71,12 @@ public class Main {
             for (int i = 0; i < lossHistory.size(); i++) {
                 System.out.printf("Epoch %d: Loss = %.4f\n", i + 1, lossHistory.get(i));
             }
+
+            // Save model (architecture + final weights/biases) into artifacts folder with timestamp
+            long ts = System.currentTimeMillis();
+            String outPath = String.format("artifacts/model-%d.json", ts);
+            ModelIO.save(nn, outPath);
+            System.out.println("Model saved to: " + outPath);
             
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
@@ -74,4 +84,3 @@ public class Main {
         }
     }
 }
-

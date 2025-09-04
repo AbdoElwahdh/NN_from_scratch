@@ -1,8 +1,13 @@
 package org.example.activations;
 
-
+/**
+ * Softmax activation producing a probability distribution over classes.
+ */
 public class Softmax implements ActivationFunction {
     
+    /**
+     * Applies numerically-stable softmax.
+     */
     @Override
     public double[] activate(double[] input) {
         double[] output = new double[input.length];
@@ -24,10 +29,12 @@ public class Softmax implements ActivationFunction {
         return output;
     }
     
+    /**
+     * Returns diagonal approximation of softmax Jacobian (for simplicity).
+     * For training, combined gradient with cross-entropy is used instead.
+     */
     @Override
     public double[] derivative(double[] input) {
-        // For softmax, the derivative is more complex and usually handled
-        // in combination with cross-entropy loss
         double[] softmax = activate(input);
         double[] derivative = new double[input.length];
         for (int i = 0; i < input.length; i++) {
