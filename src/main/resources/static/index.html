@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Digit Recognizer</title>
+    <!-- ربط ملف الـ CSS الخارجي -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Upload a Digit Image</h1>
+    <form id="upload-form">
+        <label for="image-file" id="upload-label">Choose Image</label>
+        <input type="file" id="image-file" name="image" accept="image/*" required>
+    </form>
+    <div id="preview">Preview</div>
+    <div id="result-box">Prediction</div>
+</div>
+
+<!-- ربط ملف الـ JavaScript الخارجي (يُفضل وضعه في نهاية الـ body) -->
+<script src="/js/main.js"></script>
+</body>
+</html>
